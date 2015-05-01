@@ -1,0 +1,7 @@
+<snippet>
+    <!-- Wraps JSX React element in another element preserving whitespace -->
+    <content><![CDATA[${SELECTION/( +).*/$1/}<${1:Component}>
+$0${SELECTION/([ \t]+)([^\n]+)/\t$1$2/g}
+${SELECTION/( +).*/$1/}</${1/([^ ]+).*/$1/}>]]></content>
+    <description>Smart Wrap</description>
+</snippet>

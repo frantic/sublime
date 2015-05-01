@@ -1,0 +1,9 @@
+[
+  { "keys": ["super+v"], "command": "paste_and_indent" },
+  { "keys": ["super+shift+v"], "command": "paste" },
+  { "keys": ["ctrl+w"], "command": "focus_neighboring_group", "args": {"forward": true} },
+  { "keys": ["super+alt+r"], "command": "sort_requires" },
+  { "keys": ["super+alt+a"], "command": "add_require" },
+  { "keys": ["ctrl+shift+w"], "command": "insert_snippet", "args": { "name": "Packages/User/smart-wrap.sublime-snippet" } },
+  { "keys": ["super+shift+k"], "command": "toggle_color_scheme" }
+]
