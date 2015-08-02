@@ -69,3 +69,34 @@ class FlowTypeAtPosCommand(sublime_plugin.EventListener):
 
     def on_post_save_async(self, view):
         self.get_flow_type_at_pos(view)
+
+    def on_query_completions(self, view, prefix, location):
+        file_name = view.file_name()
+        if not file_name or not file_name.endswith('.js'):
+            return
+
+        point = view.sel()[0].a
+        (line, col) = view.rowcol(point)
+        content = view.substr(sublime.Region(0, view.size()))
+
+        proc = subprocess.Popen(
+            ["flow", "autocomplete", "--json", file_name, str(line + 1), str(col + 1)],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        (stdout, stderr) = proc.communicate(bytes(content, "utf8"))
+        (stdout, stderr) = (stdout.decode("utf8"), stderr.decode("utf8"))
+
+        if proc.returncode == 0 and not stderr:
+            resp = json.loads(stdout)
+
+            result = []
+            for suggestion in resp:
+                name = suggestion.get("name", "?")
+                type = suggestion.get("type", "?")
+                result.append(("%s\t%s" % (name, type), name))
+
+            return (result, sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS)
+        else:
+            print(stderr)
+            return [];
