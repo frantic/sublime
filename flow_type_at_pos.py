@@ -30,6 +30,10 @@ class FlowTypeAtPosCommand(sublime_plugin.EventListener):
         if not file_name or not file_name.endswith('.js') or view.is_dirty():
             return
 
+        body = view.substr(sublime.Region(0, view.size()))
+        if not '@flow' in body:
+            return
+
         point = view.sel()[0].a
         (line, col) = view.rowcol(point)
 
@@ -73,6 +77,10 @@ class FlowTypeAtPosCommand(sublime_plugin.EventListener):
     def on_query_completions(self, view, prefix, location):
         file_name = view.file_name()
         if not file_name or not file_name.endswith('.js'):
+            return
+
+        body = view.substr(sublime.Region(0, view.size()))
+        if not '@flow' in body:
             return
 
         point = view.sel()[0].a
